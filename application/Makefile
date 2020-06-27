@@ -5,7 +5,7 @@ ifndef IMPERAS_HOME
   IMPERAS_ERROR := $(error "IMPERAS_HOME not defined")
 endif
 
-CROSS?=OR1K
+CROSS?=RISCV32
 all: app1.$(CROSS).elf  app2.$(CROSS).elf
 
 -include $(IMPERAS_HOME)/lib/$(IMPERAS_ARCH)/CrossCompiler/$(CROSS).makefile.include

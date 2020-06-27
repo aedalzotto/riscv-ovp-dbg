@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "simulatorIntercepts.h"
+
 
 #define NUM_VALUES 40
  
@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
 
     static int resultadofib, i, j, id ;
 
-    id = impProcessorId();
+    id = 0;
 
 
     printf("CPU %d starting fibonacci...\n", id);
@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
 
     }
 
-    printf("terminei CPU fibonacci...\n", id);
+    printf("terminei CPU %d fibonacci...\n",id);
 
     return 1;
 }

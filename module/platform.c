@@ -1,5 +1,7 @@
 #include "op/op.h"
 
+#define APP_LDR_CTRL    OP_LDR_SET_START|OP_LDR_FAIL_IS_ERROR
+
 static void constructPlatform(optModuleP mi)
 {
 	/* Get the processor path */
@@ -28,10 +30,10 @@ static void constructPlatform(optModuleP mi)
 				OP_BUS_CONNECT(bus0, "DATA")
 			)
 		),
-		/* Set the processor variant */
 		OP_PARAMS(
-			OP_PARAM_STRING_SET("variant", "RV64G")
+			OP_PARAM_STRING_SET("variant", "RV32I")
 		)
+		
 	);
 
 	/* Create the processor bus */
@@ -40,7 +42,7 @@ static void constructPlatform(optModuleP mi)
 	optProcessorP processor1 = opProcessorNew(
 		mi,
 		riscvModel,
-		"cpu0",
+		"cpu1",
 		/* Connect instruction and data to the same bus */
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
@@ -48,9 +50,8 @@ static void constructPlatform(optModuleP mi)
 				OP_BUS_CONNECT(bus1, "DATA")
 			)
 		),
-		/* Set the processor variant */
-		OP_PARAMS(
-			OP_PARAM_STRING_SET("variant", "RV64G")
+        OP_PARAMS(
+			OP_PARAM_STRING_SET("variant", "RV32I")
 		)
 	);
 
@@ -80,74 +81,85 @@ static void constructPlatform(optModuleP mi)
 		0
 	);
 
-	/* Create and connect main memory */
+	//optBusP bus_s = opBusNew(mi, "bus_s", 32, 0, 0);
+	
+	// Create and connect shared memory 
+	
 	opMemoryNew(
 		mi,
 		"shared",
 		OP_PRIV_RWX,
-		0x00010000,
+		(0x00040000ULL)-(0x00020000ULL),
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus0, "mp0", .slave=1, .addrLo=0x00020000, .addrHi=0x00030000),
-				OP_BUS_CONNECT(bus1, "mp0", .slave=1, .addrLo=0x00020000, .addrHi=0x00030000)
+				OP_BUS_CONNECT(bus0, "sp0", .slave=1, .addrLo=0x00020000ULL, .addrHi=0x00040000ULL),
+				OP_BUS_CONNECT(bus1, "sp1", .slave=1, .addrLo=0x00020000ULL, .addrHi=0x00040000ULL)
 			)
 		),
 		0
 	);
-
+	
+	/* Create and connect processor0 memory */
 	opMemoryNew(
 		mi,
 		"local0",
 		OP_PRIV_RWX,
-		0x00010000,
+		(0x0001ffffULL)-(0x0ULL),
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus0, "mp1", .slave=1, .addrLo=0x0, .addrHi=0x00010000)
+				OP_BUS_CONNECT(bus0, "mp1", .slave=1, .addrLo=0x0ULL, .addrHi=0x0001ffffULL)
 			)
 		),
 		0
 	);
 
-	opMemoryNew(
-		mi,
-		"local1",
-		OP_PRIV_RWX,
-		0x00010000,
-		OP_CONNECTIONS(
-			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus1, "mp1", .slave=1, .addrLo=0x0, .addrHi=0x00010000)
-			)
-		),
-		0
-	);
-
+	/* Create and connect processor0 stack memory */
+	
 	opMemoryNew(
 		mi,
 		"stack0",
 		OP_PRIV_RWX,
-		0x00000FFF,
+		0x00000fff,
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus0, "mp2", .slave=1, .addrLo=0XFFFFF000, .addrHi=0XFFFFFFFF)
+				OP_BUS_CONNECT(bus0, "mp2", .slave=1, .addrLo=0xfffff000ULL, .addrHi=0xffffffffULL)
+			)
+		),
+		0
+	);
+	
+	/* Create and connect processor1 memory */
+	opMemoryNew(
+		mi,
+		"local1",
+		OP_PRIV_RWX,
+		(0x0001ffffULL)-(0x0ULL),
+		OP_CONNECTIONS(
+			OP_BUS_CONNECTIONS(
+				OP_BUS_CONNECT(bus1, "mp1", .slave=1, .addrLo=0x0ULL, .addrHi=0x0001ffffULL)
 			)
 		),
 		0
 	);
 
+ 	/* Create and connect processor1 stack memory */
+ 	
 	opMemoryNew(
 		mi,
 		"stack1",
 		OP_PRIV_RWX,
-		0x00000FFF,
+		0x00000fff,
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus1, "mp2", .slave=1, .addrLo=0XFFFFF000, .addrHi=0XFFFFFFFF)
+				OP_BUS_CONNECT(bus1, "mp2", .slave=1, .addrLo=0xfffff000ULL, .addrHi=0xffffffffULL)
 			)
 		),
 		0
 	);
+	
 
-	// opBusApplicationLoad(bus0, argv[1], 0, 0);	
+	opProcessorApplicationLoad(processor0, "application/app1.RISCV32.elf", APP_LDR_CTRL, 0);
+	opProcessorApplicationLoad(processor1, "application/app2.RISCV32.elf", APP_LDR_CTRL, 0);
 
 }
 
@@ -169,5 +181,6 @@ int main(int argc, const char *argv[])
 
 	opRootModuleSimulate(mi);
 	opSessionTerminate();
+
 	return 0;
 } 

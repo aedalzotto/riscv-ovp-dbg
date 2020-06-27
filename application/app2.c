@@ -1,21 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "simulatorIntercepts.h"
-
  
+
 // ENDEREÇOS COMPARTILHADOS
 // ENDEREÇOS COMPARTILHADOS
 #define RESULTADO (*(volatile unsigned int*)0x00020000)
 #define FLAG      (*(volatile unsigned int*)0x00020004)
+
 
 int main(int argc, char **argv) {
 
 
     static int result, i, id ;
 
-    id = impProcessorId();
-
+    id = 1;
 
     printf("CPU %d starting acumulação...\n", id);
 
@@ -33,7 +32,8 @@ int main(int argc, char **argv) {
     } 
 
 	FLAG = 0;
-    printf("terminei CPU acumulação...\n", id);
+
+    printf("terminei CPU %d acumulação...\n" id);
 
     return 1;
 }
