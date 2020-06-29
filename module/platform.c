@@ -33,7 +33,6 @@ static void constructPlatform(optModuleP mi)
 		OP_PARAMS(
 			OP_PARAM_STRING_SET("variant", "RV32I")
 		)
-		
 	);
 
 	/* Create the processor bus */
@@ -89,11 +88,11 @@ static void constructPlatform(optModuleP mi)
 		mi,
 		"shared",
 		OP_PRIV_RWX,
-		(0x00040000ULL)-(0x00020000ULL),
+		0x200000ULL-1,
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus0, "sp0", .slave=1, .addrLo=0x00020000ULL, .addrHi=0x00040000ULL),
-				OP_BUS_CONNECT(bus1, "sp1", .slave=1, .addrLo=0x00020000ULL, .addrHi=0x00040000ULL)
+				OP_BUS_CONNECT(bus0, "mp0", .slave=1, .addrLo=0x00200000ULL, .addrHi=0x3FFFFFULL),
+				OP_BUS_CONNECT(bus1, "mp1", .slave=1, .addrLo=0x00200000ULL, .addrHi=0x3FFFFFULL)
 			)
 		),
 		0
@@ -104,10 +103,10 @@ static void constructPlatform(optModuleP mi)
 		mi,
 		"local0",
 		OP_PRIV_RWX,
-		(0x0001ffffULL)-(0x0ULL),
+		0x200000ULL-1,
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus0, "mp1", .slave=1, .addrLo=0x0ULL, .addrHi=0x0001ffffULL)
+				OP_BUS_CONNECT(bus0, "mp0", .slave=1, .addrLo=0x0ULL, .addrHi=0x1FFFFFULL)
 			)
 		),
 		0
@@ -119,10 +118,10 @@ static void constructPlatform(optModuleP mi)
 		mi,
 		"stack0",
 		OP_PRIV_RWX,
-		0x00000fff,
+		0xFFC00000ULL-1,
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus0, "mp2", .slave=1, .addrLo=0xfffff000ULL, .addrHi=0xffffffffULL)
+				OP_BUS_CONNECT(bus0, "mp0", .slave=1, .addrLo=0x400000ULL, .addrHi=0xFFFFFFFFULL)
 			)
 		),
 		0
@@ -133,10 +132,10 @@ static void constructPlatform(optModuleP mi)
 		mi,
 		"local1",
 		OP_PRIV_RWX,
-		(0x0001ffffULL)-(0x0ULL),
+		0x200000ULL-1,
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus1, "mp1", .slave=1, .addrLo=0x0ULL, .addrHi=0x0001ffffULL)
+				OP_BUS_CONNECT(bus1, "mp1", .slave=1, .addrLo=0x0ULL, .addrHi=0x1FFFFFULL)
 			)
 		),
 		0
@@ -147,10 +146,10 @@ static void constructPlatform(optModuleP mi)
 		mi,
 		"stack1",
 		OP_PRIV_RWX,
-		0x00000fff,
+		0xFFC00000ULL-1,
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus1, "mp2", .slave=1, .addrLo=0xfffff000ULL, .addrHi=0xffffffffULL)
+				OP_BUS_CONNECT(bus1, "mp1", .slave=1, .addrLo=0x400000ULL, .addrHi=0xFFFFFFFFULL)
 			)
 		),
 		0
