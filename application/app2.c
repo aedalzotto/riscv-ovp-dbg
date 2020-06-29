@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
 
 	FLAG = 0;
 
-    printf("terminei CPU %d acumulação...\n" id);
+    printf("terminei CPU %d acumulação...\n", id);
 
     return 1;
 }

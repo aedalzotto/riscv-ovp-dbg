@@ -15,4 +15,4 @@ make -C application CROSS=${CROSS}
 # Build Platform
 make -C module 
 
-platform/platform.${IMPERAS_ARCH}.exe 
+module/platform.${IMPERAS_ARCH}.exe 
