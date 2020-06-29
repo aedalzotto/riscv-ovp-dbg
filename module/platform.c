@@ -19,7 +19,7 @@ static void constructPlatform(optModuleP mi)
 	optBusP bus0 = opBusNew(mi, "bus0", 32, 0, 0);
 
 	/* Create the processor instance */
-	optProcessorP processor0 = opProcessorNew(
+	optProcessorP cpu0 = opProcessorNew(
 		mi,
 		riscvModel,
 		"cpu0",
@@ -39,7 +39,7 @@ static void constructPlatform(optModuleP mi)
 	/* Create the processor bus */
 	optBusP bus1 = opBusNew(mi, "bus1", 32, 0, 0);
 
-	optProcessorP processor1 = opProcessorNew(
+	optProcessorP cpu1 = opProcessorNew(
 		mi,
 		riscvModel,
 		"cpu1",
@@ -68,14 +68,14 @@ static void constructPlatform(optModuleP mi)
 
 	/* Set the CPU semihost */
 	opProcessorExtensionNew(
-		processor0,
+		cpu0,
 		riscvSemihost,
 		"pk_0",
 		0
 	);
 
 	opProcessorExtensionNew(
-		processor1,
+		cpu1,
 		riscvSemihost,
 		"pk_1",
 		0
@@ -143,7 +143,6 @@ static void constructPlatform(optModuleP mi)
 	);
 
  	/* Create and connect processor1 stack memory */
- 	
 	opMemoryNew(
 		mi,
 		"stack1",
@@ -158,8 +157,8 @@ static void constructPlatform(optModuleP mi)
 	);
 	
 
-	opProcessorApplicationLoad(processor0, "application/app1.RISCV32.elf", APP_LDR_CTRL, 0);
-	opProcessorApplicationLoad(processor1, "application/app2.RISCV32.elf", APP_LDR_CTRL, 0);
+	// opProcessorApplicationLoad(processor0, "application/app1.RISCV32.elf", APP_LDR_CTRL, 0);
+	// opProcessorApplicationLoad(processor1, "application/app2.RISCV32.elf", APP_LDR_CTRL, 0);
 
 }
 
@@ -176,9 +175,9 @@ int main(int argc, const char *argv[])
 	paramList = opParamBoolSet(paramList, OP_FP_VERBOSE, 1);
 	paramList = opParamBoolSet(paramList, OP_FP_STOPONCONTROLC, 1);
 
-	/* Enable QuantumLeap and set to max threads available */
-	paramList = opParamBoolSet(paramList, OP_FP_PARALLEL, 1);
-	paramList = opParamBoolSet(paramList, OP_FP_PARALLELMAX, 1);
+	// /* Enable QuantumLeap and set to max threads available */
+	// paramList = opParamBoolSet(paramList, OP_FP_PARALLEL, 1);
+	// paramList = opParamBoolSet(paramList, OP_FP_PARALLELMAX, 1);
 
 	optModuleP mi = opRootModuleNew(0, 0, paramList);
 
