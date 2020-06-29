@@ -80,19 +80,17 @@ static void constructPlatform(optModuleP mi)
 		0
 	);
 
-	//optBusP bus_s = opBusNew(mi, "bus_s", 32, 0, 0);
 	
 	// Create and connect shared memory 
-	
 	opMemoryNew(
 		mi,
 		"shared",
 		OP_PRIV_RWX,
-		0x200000ULL-1,
+		0x10000ULL-1,
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus0, "mp0", .slave=1, .addrLo=0x00200000ULL, .addrHi=0x3FFFFFULL),
-				OP_BUS_CONNECT(bus1, "mp1", .slave=1, .addrLo=0x00200000ULL, .addrHi=0x3FFFFFULL)
+				OP_BUS_CONNECT(bus0, "mp0", .slave=1, .addrLo=0x0ULL, .addrHi=0xFFFFULL),
+				OP_BUS_CONNECT(bus1, "mp1", .slave=1, .addrLo=0x0ULL, .addrHi=0xFFFFULL)
 			)
 		),
 		0
@@ -103,10 +101,10 @@ static void constructPlatform(optModuleP mi)
 		mi,
 		"local0",
 		OP_PRIV_RWX,
-		0x200000ULL-1,
+		0x40000ULL-1,
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus0, "mp0", .slave=1, .addrLo=0x0ULL, .addrHi=0x1FFFFFULL)
+				OP_BUS_CONNECT(bus0, "mp0", .slave=1, .addrLo=0x10000ULL, .addrHi=0x4FFFFULL)
 			)
 		),
 		0
@@ -118,10 +116,10 @@ static void constructPlatform(optModuleP mi)
 		mi,
 		"stack0",
 		OP_PRIV_RWX,
-		0xFFC00000ULL-1,
+		0x10000ULL-1,
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus0, "mp0", .slave=1, .addrLo=0x400000ULL, .addrHi=0xFFFFFFFFULL)
+				OP_BUS_CONNECT(bus0, "mp0", .slave=1, .addrLo=0xFFFF0000ULL, .addrHi=0xFFFFFFFFULL)
 			)
 		),
 		0
@@ -132,10 +130,10 @@ static void constructPlatform(optModuleP mi)
 		mi,
 		"local1",
 		OP_PRIV_RWX,
-		0x200000ULL-1,
+		0x40000ULL-1,
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus1, "mp1", .slave=1, .addrLo=0x0ULL, .addrHi=0x1FFFFFULL)
+				OP_BUS_CONNECT(bus1, "mp1", .slave=1, .addrLo=0x10000ULL, .addrHi=0x4FFFFULL)
 			)
 		),
 		0
@@ -146,19 +144,14 @@ static void constructPlatform(optModuleP mi)
 		mi,
 		"stack1",
 		OP_PRIV_RWX,
-		0xFFC00000ULL-1,
+		0x10000ULL-1,
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
-				OP_BUS_CONNECT(bus1, "mp1", .slave=1, .addrLo=0x400000ULL, .addrHi=0xFFFFFFFFULL)
+				OP_BUS_CONNECT(bus1, "mp1", .slave=1, .addrLo=0xFFFF0000ULL, .addrHi=0xFFFFFFFFULL)
 			)
 		),
 		0
 	);
-	
-
-	// opProcessorApplicationLoad(processor0, "application/app1.RISCV32.elf", APP_LDR_CTRL, 0);
-	// opProcessorApplicationLoad(processor1, "application/app2.RISCV32.elf", APP_LDR_CTRL, 0);
-
 }
 
 int main(int argc, const char *argv[])
@@ -173,10 +166,6 @@ int main(int argc, const char *argv[])
 	optParamP paramList = 0;
 	paramList = opParamBoolSet(paramList, OP_FP_VERBOSE, 1);
 	paramList = opParamBoolSet(paramList, OP_FP_STOPONCONTROLC, 1);
-
-	// /* Enable QuantumLeap and set to max threads available */
-	// paramList = opParamBoolSet(paramList, OP_FP_PARALLEL, 1);
-	// paramList = opParamBoolSet(paramList, OP_FP_PARALLELMAX, 1);
 
 	optModuleP mi = opRootModuleNew(0, 0, paramList);
 

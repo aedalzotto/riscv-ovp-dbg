@@ -5,8 +5,8 @@
 
 // ENDEREÇOS COMPARTILHADOS
 // ENDEREÇOS COMPARTILHADOS
-#define RESULTADO (*(volatile unsigned int*)0x00200000)
-#define FLAG      (*(volatile unsigned int*)0x00200004)
+#define RESULTADO (*(volatile unsigned int*)0x00)
+#define FLAG      (*(volatile unsigned int*)0x04)
 
 
 int main(int argc, char **argv) {
