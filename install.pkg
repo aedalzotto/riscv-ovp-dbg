@@ -1,0 +1,3 @@
+install RUNTIME OVPsim CpuManager
+riscv riscv.toolchain
+riscv riscv.model

@@ -21,7 +21,6 @@ int main(int argc, char **argv) {
 
     id = 0;
 
-
     printf("CPU %d starting fibonacci...\n", id);
 
     for(i=0; i<NUM_VALUES; i++)  {
