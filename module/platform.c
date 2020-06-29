@@ -175,6 +175,11 @@ int main(int argc, const char *argv[])
 	optParamP paramList = 0;
 	paramList = opParamBoolSet(paramList, OP_FP_VERBOSE, 1);
 	paramList = opParamBoolSet(paramList, OP_FP_STOPONCONTROLC, 1);
+
+	/* Enable QuantumLeap and set to max threads available */
+	paramList = opParamBoolSet(paramList, OP_FP_PARALLEL, 1);
+	paramList = opParamBoolSet(paramList, OP_FP_PARALLELMAX, 1);
+
 	optModuleP mi = opRootModuleNew(0, 0, paramList);
 
 	constructPlatform(mi);
