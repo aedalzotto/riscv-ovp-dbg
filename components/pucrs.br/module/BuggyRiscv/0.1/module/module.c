@@ -1,8 +1,9 @@
 #include "op/op.h"
 
 #define APP_LDR_CTRL    OP_LDR_SET_START|OP_LDR_FAIL_IS_ERROR
+#define HARNESS_NAME "harness" 
 
-static void constructPlatform(optModuleP mi)
+static OP_CONSTRUCT_FN(moduleConstructor) 
 {
 	/* Get the processor path */
 	const char *riscvModel = opVLNVString(
@@ -154,25 +155,35 @@ static void constructPlatform(optModuleP mi)
 	);
 }
 
-int main(int argc, const char *argv[])
-{
-	/* Init OP */
-	opSessionInit(OP_VERSION);
+// int main(int argc, const char *argv[])
+// {
+// 	/* Init OP */
+// 	opSessionInit(OP_VERSION);
 
-	/* Default parser. --program argument sets the elf */
-	opCmdParseStd(argv[0], OP_AC_ALL, argc, argv);
+// 	/* Default parser. --program argument sets the elf */
+// 	opCmdParseStd(argv[0], OP_AC_ALL, argc, argv);
 
-	/* Init root module enabling verbose mode to get statistics */
-	optParamP paramList = 0;
-	paramList = opParamBoolSet(paramList, OP_FP_VERBOSE, 1);
-	paramList = opParamBoolSet(paramList, OP_FP_STOPONCONTROLC, 1);
+// 	/* Init root module enabling verbose mode to get statistics */
+// 	optParamP paramList = 0;
+// 	paramList = opParamBoolSet(paramList, OP_FP_VERBOSE, 1);
+// 	paramList = opParamBoolSet(paramList, OP_FP_STOPONCONTROLC, 1);
 
-	optModuleP mi = opRootModuleNew(0, 0, paramList);
+// 	optModuleP mi = opRootModuleNew(0, 0, paramList);
 
-	constructPlatform(mi);
+// 	constructPlatform(mi);
 
-	opRootModuleSimulate(mi);
-	opSessionTerminate();
+// 	opRootModuleSimulate(mi);
+// 	opSessionTerminate();
 
-	return 0;
-} 
+// 	return 0;
+// }
+
+optModuleAttr modelAttrs = {
+ .versionString = OP_VERSION,
+ .type = OP_MODULE,
+ .name = HARNESS_NAME,
+ .releaseStatus = OP_UNSET,
+ .purpose = OP_PP_BAREMETAL,
+ .visibility = OP_VISIBLE,
+ .constructCB = moduleConstructor,
+};
