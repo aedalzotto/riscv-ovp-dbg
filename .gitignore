@@ -4,3 +4,6 @@
 *.so
 *.exe
 *.elf
+*.log
+*.txt
+*.cmd
