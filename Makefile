@@ -55,7 +55,7 @@ debug: library applications
                      --mpdconsole
 
 gui: library applications
-	@echo "Launching Imperas Simulation Platform (eGui)"
+	@echo "Launching Imperas Simulation Platform (iGui)"
 	$(V) harness.exe --vlnvroot $(VLNVROOT) \
 	                 --modulevendor $(MODULEVENDOR) --modulelibrary $(MODULELIBRARY) --modulename $(MODULENAME) --moduleversion $(MODULEVERSION) \
 	                 --program $(MODULENAME)/cpu0=application/app1.RISCV32.elf \
