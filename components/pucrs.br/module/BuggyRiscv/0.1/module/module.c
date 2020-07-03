@@ -55,6 +55,25 @@ static OP_CONSTRUCT_FN(moduleConstructor)
 		)
 	);
 
+	/* Create the processor bus */
+	optBusP bus2 = opBusNew(mi, "bus2", 32, 0, 0);
+
+	optProcessorP cpu2 = opProcessorNew(
+		mi,
+		riscvModel,
+		"cpu2",
+		/* Connect instruction and data to the same bus */
+		OP_CONNECTIONS(
+			OP_BUS_CONNECTIONS(
+				OP_BUS_CONNECT(bus2, "INSTRUCTION"),
+				OP_BUS_CONNECT(bus2, "DATA")
+			)
+		),
+        OP_PARAMS(
+			OP_PARAM_STRING_SET("variant", "RV32I")
+		)
+	);
+
 	/* Get the semihost file */
 	const char *riscvSemihost = opVLNVString(
 		0, // use the default VLNV path
@@ -81,6 +100,12 @@ static OP_CONSTRUCT_FN(moduleConstructor)
 		0
 	);
 
+	opProcessorExtensionNew(
+		cpu2,
+		riscvSemihost,
+		"pk_1",
+		0
+	);
 	
 	// Create and connect shared memory 
 	opMemoryNew(
@@ -91,7 +116,8 @@ static OP_CONSTRUCT_FN(moduleConstructor)
 		OP_CONNECTIONS(
 			OP_BUS_CONNECTIONS(
 				OP_BUS_CONNECT(bus0, "mp0", .slave=1, .addrLo=0x0ULL, .addrHi=0xFFFFULL),
-				OP_BUS_CONNECT(bus1, "mp1", .slave=1, .addrLo=0x0ULL, .addrHi=0xFFFFULL)
+				OP_BUS_CONNECT(bus1, "mp1", .slave=1, .addrLo=0x0ULL, .addrHi=0xFFFFULL),
+				OP_BUS_CONNECT(bus2, "mp2", .slave=1, .addrLo=0x0ULL, .addrHi=0xFFFFULL)
 			)
 		),
 		0
@@ -153,6 +179,37 @@ static OP_CONSTRUCT_FN(moduleConstructor)
 		),
 		0
 	);
+
+	/* Create and connect processor1 memory */
+	opMemoryNew(
+		mi,
+		"local2",
+		OP_PRIV_RWX,
+		0x40000ULL-1,
+		OP_CONNECTIONS(
+			OP_BUS_CONNECTIONS(
+				OP_BUS_CONNECT(bus2, "mp2", .slave=1, .addrLo=0x10000ULL, .addrHi=0x4FFFFULL)
+			)
+		),
+		0
+	);
+
+ 	/* Create and connect processor1 stack memory */
+	opMemoryNew(
+		mi,
+		"stack2",
+		OP_PRIV_RWX,
+		0x10000ULL-1,
+		OP_CONNECTIONS(
+			OP_BUS_CONNECTIONS(
+				OP_BUS_CONNECT(bus2, "mp2", .slave=1, .addrLo=0xFFFF0000ULL, .addrHi=0xFFFFFFFFULL)
+			)
+		),
+		0
+	);
+
+
+
 }
 
 // int main(int argc, const char *argv[])

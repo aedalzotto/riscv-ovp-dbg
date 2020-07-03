@@ -17,7 +17,7 @@
  */
 
 #include <stdio.h>
-#define NUM 1
+#define NUM 3
 #define SHAREDMEM 0x00
 // Buffer in shared memory area
 volatile unsigned *buffer = (volatile unsigned *) (SHAREDMEM + NUM*16*4);
@@ -35,7 +35,7 @@ int main () {
         v = fib(10);
 
         // Write to buffer
-        for ( b = 0 ; b < 17 ; b++ )
+        for ( b = 0 ; b < 16 ; b++ )
             buffer[b] = v + NUM;
 
         // Check values in buffer

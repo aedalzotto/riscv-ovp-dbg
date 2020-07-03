@@ -6,7 +6,7 @@ ifndef IMPERAS_HOME
 endif
 
 CROSS?=RISCV32
-all: app1.$(CROSS).elf  app2.$(CROSS).elf
+all: app1.$(CROSS).elf  app2.$(CROSS).elf app3.$(CROSS).elf
 
 -include $(IMPERAS_HOME)/lib/$(IMPERAS_ARCH)/CrossCompiler/$(CROSS).makefile.include
 ifeq ($($(CROSS)_CC),)
@@ -29,6 +29,13 @@ app2.$(CROSS).o: app2.c
 	$(V) echo "Compiling Application $@"
 	$(V) $(IMPERAS_CC) -g -c  $(IMPERAS_CFLAGS) -D$(CROSS)  -o $@  $<
 
+app3.$(CROSS).elf: app3.$(CROSS).o
+	$(V) echo "Linking Application $@"
+	$(V) $(IMPERAS_LINK) -g -o $@  $^  $(IMPERAS_LDFLAGS)
+
+app3.$(CROSS).o: app3.c
+	$(V) echo "Compiling Application $@"
+	$(V) $(IMPERAS_CC) -g -c  $(IMPERAS_CFLAGS) -D$(CROSS)  -o $@  $<
 
 clean:
-	- rm -f app1.$(CROSS).elf app1.$(CROSS).o  app2.$(CROSS).elf app2.$(CROSS).o
+	- rm -f app1.$(CROSS).elf app1.$(CROSS).o  app2.$(CROSS).elf app2.$(CROSS).o app3.$(CROSS).elf app3.$(CROSS).o

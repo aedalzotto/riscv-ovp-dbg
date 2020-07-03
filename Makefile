@@ -42,6 +42,7 @@ run: library applications
 	                 --modulevendor $(MODULEVENDOR) --modulelibrary $(MODULELIBRARY) --modulename $(MODULENAME) --moduleversion $(MODULEVERSION) \
 	                 --program $(MODULENAME)/cpu0=application/app1.RISCV32.elf \
 	                 --program $(MODULENAME)/cpu1=application/app2.RISCV32.elf \
+	                 --program $(MODULENAME)/cpu2=application/app3.RISCV32.elf \
                      --output imperas.log
 
 # Launch Imperas in interactive mode 
@@ -51,6 +52,7 @@ debug: library applications
                      --modulevendor $(MODULEVENDOR) --modulelibrary $(MODULELIBRARY) --modulename $(MODULENAME) --moduleversion $(MODULEVERSION) \
 	                 --program $(MODULENAME)/cpu0=application/app1.RISCV32.elf \
 	                 --program $(MODULENAME)/cpu1=application/app2.RISCV32.elf \
+	                 --program $(MODULENAME)/cpu2=application/app3.RISCV32.elf \
                      --output imperas.log \
                      --mpdconsole
 
@@ -60,6 +62,7 @@ gui: library applications
 	                 --modulevendor $(MODULEVENDOR) --modulelibrary $(MODULELIBRARY) --modulename $(MODULENAME) --moduleversion $(MODULEVERSION) \
 	                 --program $(MODULENAME)/cpu0=application/app1.RISCV32.elf \
 	                 --program $(MODULENAME)/cpu1=application/app2.RISCV32.elf \
+	                 --program $(MODULENAME)/cpu2=application/app3.RISCV32.elf \
                      --output imperas.log \
                      --mpdigui
 

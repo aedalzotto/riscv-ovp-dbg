@@ -17,7 +17,7 @@
  */
 
 #include <stdio.h>
-#define 1
+#define NUM 2
 #define SHAREDMEM 0x00
 // Buffer in shared memory area
 volatile unsigned *buffer = (volatile unsigned *) (SHAREDMEM + NUM*16*4);
